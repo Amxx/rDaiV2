@@ -60,11 +60,11 @@ contract rDaiV2Core is ERC1155
 		uint256 balance    = IAllocationStrategy(strategy).refToUnderlying(refSupply[_id]);
 		uint256 distribute = totalSupply[_id] - balance;
 		// distribute new stuff
-		for (uint256 i = 0; i < recipients.length; ++i)
+		for (uint256 i = 1; i < recipients.length; ++i)
 		{
 			_mint(recipients[i], _id, distribute * proportions[i] / weight, "");
 		}
-		// sanity
+		// sanity, everything not yet distributed to recipient[0]
 		_mint(recipients[0], _id, totalSupply[_id] - balance, "");
 	}
 
