@@ -24,6 +24,11 @@ contract rDaiV2Core is ERC1155
 		hatRegistry = HatRegistry(_hatRegistry);
 	}
 
+	/**
+	 * @dev Mint rDai tokens for the `_id` hat.
+	 *
+	 * Requirements: _msgSender must approve `_amount` underlying tokens to the hat's module
+	 */
 	function mint(uint256 _id, uint256 _amount)
 	public
 	{
@@ -33,6 +38,9 @@ contract rDaiV2Core is ERC1155
 		_mint(sender, _id, _amount, "");
 	}
 
+	/**
+	 * @dev Redeem rDai tokens for the `_id` hat.
+	 */
 	function redeem(uint256 _id, uint256 _amount)
 	public
 	{
@@ -42,6 +50,9 @@ contract rDaiV2Core is ERC1155
 		_burn(sender, _id, _amount);
 	}
 
+	/**
+	 * @dev Reallocate rDai tokens between 2 hats that share the same underlying asset. Any extra token produced by the initial hat will be sent to the _msgSender()
+	 */
 	function reallocate(uint256 _idFrom, uint256 _idTo, uint256 _amount)
 	public
 	{
@@ -62,6 +73,9 @@ contract rDaiV2Core is ERC1155
 		_mint(sender, _idTo, _amount, "");
 	}
 
+	/**
+	 * @dev Register interests for a hat by minting the corresponding amount of rDai on the recipients buckets.
+	 */
 	function accrue(uint256 _id)
 	public
 	{

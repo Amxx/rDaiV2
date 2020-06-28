@@ -28,12 +28,12 @@ library Hats
 	}
 
 	/**
-	* @dev Adds a key-value pair to a map, or updates the value for an existing
-	* key. O(1).
-	*
-	* Returns true if the key was added to the map, that is if it was not
-	* already present.
-	*/
+	 * @dev Adds a key-value pair to a map, or updates the value for an existing
+	 * key. O(1).
+	 *
+	 * Returns true if the key was added to the map, that is if it was not
+	 * already present.
+	 */
 	function _set(Map storage map, bytes32 key, bytes32 value) private returns (bool) {
 		// We read and store the key's index to prevent multiple reads from the same storage slot
 		uint256 keyIndex = map._indexes[key];
@@ -51,10 +51,10 @@ library Hats
 	}
 
 	/**
-	* @dev Removes a key-value pair from a map. O(1).
-	*
-	* Returns true if the key was removed from the map, that is if it was present.
-	*/
+	 * @dev Removes a key-value pair from a map. O(1).
+	 *
+	 * Returns true if the key was removed from the map, that is if it was present.
+	 */
 	function _remove(Map storage map, bytes32 key) private returns (bool) {
 		// We read and store the key's index to prevent multiple reads from the same storage slot
 		uint256 keyIndex = map._indexes[key];
@@ -90,29 +90,29 @@ library Hats
 	}
 
 	/**
-	* @dev Returns true if the key is in the map. O(1).
-	*/
+	 * @dev Returns true if the key is in the map. O(1).
+	 */
 	function _contains(Map storage map, bytes32 key) private view returns (bool) {
 		return map._indexes[key] != 0;
 	}
 
 	/**
-	* @dev Returns the number of key-value pairs in the map. O(1).
-	*/
+	 * @dev Returns the number of key-value pairs in the map. O(1).
+	 */
 	function _length(Map storage map) private view returns (uint256) {
 		return map._entries.length;
 	}
 
 	/**
-	* @dev Returns the key-value pair stored at position `index` in the map. O(1).
-	*
-	* Note that there are no guarantees on the ordering of entries inside the
-	* array, and it may change when more entries are added or removed.
-	*
-	* Requirements:
-	*
-	* - `index` must be strictly less than {length}.
-	*/
+	 * @dev Returns the key-value pair stored at position `index` in the map. O(1).
+	 *
+	 * Note that there are no guarantees on the ordering of entries inside the
+	 * array, and it may change when more entries are added or removed.
+	 *
+	 * Requirements:
+	 *
+	 * - `index` must be strictly less than {length}.
+	 */
 	function _at(Map storage map, uint256 index) private view returns (bytes32, bytes32) {
 		require(map._entries.length > index, "EnumerableMap: index out of bounds");
 
@@ -121,19 +121,19 @@ library Hats
 	}
 
 	/**
-	* @dev Returns the value associated with `key`.  O(1).
-	*
-	* Requirements:
-	*
-	* - `key` must be in the map.
-	*/
+	 * @dev Returns the value associated with `key`.  O(1).
+	 *
+	 * Requirements:
+	 *
+	 * - `key` must be in the map.
+	 */
 	function _get(Map storage map, bytes32 key) private view returns (bytes32) {
 		return _get(map, key, "EnumerableMap: nonexistent key");
 	}
 
 	/**
-	* @dev Same as {_get}, with a custom error message when `key` is not in the map.
-	*/
+	 * @dev Same as {_get}, with a custom error message when `key` is not in the map.
+	 */
 	function _get(Map storage map, bytes32 key, string memory errorMessage) private view returns (bytes32) {
 		uint256 keyIndex = map._indexes[key];
 		require(keyIndex != 0, errorMessage); // Equivalent to contains(map, key)
