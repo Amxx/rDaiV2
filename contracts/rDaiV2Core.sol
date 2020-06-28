@@ -93,6 +93,9 @@ contract rDaiV2Core is ERC1155
 		_mint(recipients[0], _id, balance - totalSupply[_id], "");
 	}
 
+	/**
+	 * @dev Overload _mint to support totalSupply per hat.
+	 */
 	function _mint(address account, uint256 id, uint256 amount, bytes memory data)
 	internal virtual override
 	{
@@ -100,6 +103,9 @@ contract rDaiV2Core is ERC1155
 		totalSupply[id] += amount; // should not need safemath
 	}
 
+	/**
+	 * @dev Overload _burn to support totalSupply per hat.
+	 */
 	function _burn(address account, uint256 id, uint256 amount)
 	internal virtual override
 	{
