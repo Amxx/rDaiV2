@@ -55,7 +55,7 @@ contract rDaiV2Core is ERC1155
 
 		require(from.underlyingAsset() == to.underlyingAsset());
 		IERC20(to.underlyingAsset()).approve(address(to), _amount);
-		refSupply[_idFrom] += from.withdraw(_amount, address(this), sender); // should not need safemath
+		refSupply[_idFrom] -= from.withdraw(_amount, address(this), sender); // should not need safemath
 		refSupply[_idTo] += to.deposit(_amount, address(this)); // should not need safemath
 
 		_burn(sender, _idFrom, _amount);
