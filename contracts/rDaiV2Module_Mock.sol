@@ -14,25 +14,25 @@ import "./IAllocationStrategy.sol";
 
 contract rDaiV2Module_Mock is IAllocationStrategy, Ownable
 {
-	IERC20 public underlyingAsset;
+	address public override underlyingAsset;
 
 	constructor(address _underlyingAsset)
 	public
 	{
-		underlyingAsset = IERC20(_underlyingAsset);
+		underlyingAsset = _underlyingAsset;
 	}
 
 	function deposit(uint256 _amount, address _from)
 	external override onlyOwner() returns (uint256)
 	{
-		underlyingAsset.transferFrom(_from, address(this), _amount);
+		IERC20(underlyingAsset).transferFrom(_from, address(this), _amount);
 		return _amount;
 	}
 
-	function withdraw(uint256 _amount, address _to)
+	function withdraw(uint256 _amount, address _to, address)
 	external override onlyOwner() returns (uint256)
 	{
-		underlyingAsset.transfer(_to, _amount);
+		IERC20(underlyingAsset).transfer(_to, _amount);
 		return _amount;
 	}
 
