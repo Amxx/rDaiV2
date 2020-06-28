@@ -143,7 +143,6 @@ library Hats
 	// Hat: address → uint256 with total
 
 	struct Hat {
-		address _strategy;
 		Map     _portions;
 		uint256 _total;
 	}
@@ -193,6 +192,7 @@ contract HatRegistry is ERC721
 
 	Counters.Counter             private counter;
 	mapping(uint256 => Hats.Hat) private hats;
+	mapping(uint256 => address)  private strategies;
 
 	constructor()
 	public ERC721("rDAI V2 Hats registry", "Hats")
@@ -210,9 +210,9 @@ contract HatRegistry is ERC721
 		counter.increment();
 		// mint hat
 		_mint(owner, counter.current());
+		strategies[counter.current()] = strategy;
 		// configure hat
 		Hats.Hat storage hat = hats[counter.current()];
-		hat._strategy = strategy;
 		for (uint256 i = 0; i < recipients.length; ++i)
 		{
 			hat.set(recipients[i], proportions[i]);
@@ -221,38 +221,45 @@ contract HatRegistry is ERC721
 
 	// Warning: not accruing interest before updating will make the update retroactive
 	function updateRecipient(
-		uint256 hatId,
+		uint256 _id,
 		address recipient,
 		uint256 proportion)
 	external
 	{
 		// only hat owner can update
-		require(_msgSender() == ownerOf(hatId), "access-restricted-to-hat-owner");
+		require(_msgSender() == ownerOf(_id), "access-restricted-to-hat-owner");
 		// null proportion → remove
 		if (proportion == 0)
 		{
-			hats[hatId].remove(recipient);
+			hats[_id].remove(recipient);
 		}
 		// positive position → update
 		else
 		{
-			hats[hatId].set(recipient, proportion);
+			hats[_id].set(recipient, proportion);
 		}
 	}
 
-	function viewHat(uint256 hatId)
+	function viewStrategy(uint256 _id)
+	external view returns (address)
+	{
+		return strategies[_id];
+	}
+
+
+	function viewHat(uint256 _id)
 	external view returns (
 		address strategy,
 		uint256 weight,
 		address[] memory recipients,
 		uint256[] memory proportions)
 	{
-		Hats.Hat storage hat = hats[hatId];
+		Hats.Hat storage hat = hats[_id];
 		uint256 length = hat.length();
-		strategy       = hat._strategy;
 		weight         = hat.weight();
 		recipients     = new address[](length);
 		proportions    = new uint256[](length);
+		strategy       = strategies[_id];
 
 		for (uint256 i = 0; i < length; ++i)
 		{

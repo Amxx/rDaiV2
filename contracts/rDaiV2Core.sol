@@ -33,8 +33,7 @@ contract rDaiV2Core is ERC1155
 	public
 	{
 		address sender = _msgSender();
-		(address strategy,,,) = hatRegistry.viewHat(_id);
-		refSupply[_id] += IAllocationStrategy(strategy).deposit(_amount, sender); // should not need safemath
+		refSupply[_id] += IAllocationStrategy(hatRegistry.viewStrategy(_id)).deposit(_amount, sender); // should not need safemath
 		_mint(sender, _id, _amount, "");
 	}
 
@@ -45,8 +44,7 @@ contract rDaiV2Core is ERC1155
 	public
 	{
 		address sender = _msgSender();
-		(address strategy,,,) = hatRegistry.viewHat(_id);
-		refSupply[_id] -= IAllocationStrategy(strategy).withdraw(_amount, sender, sender); // should not need safemath
+		refSupply[_id] -= IAllocationStrategy(hatRegistry.viewStrategy(_id)).withdraw(_amount, sender, sender); // should not need safemath
 		_burn(sender, _id, _amount);
 	}
 
@@ -58,11 +56,8 @@ contract rDaiV2Core is ERC1155
 	{
 		address sender = _msgSender();
 
-		(address strategyFrom,,,) = hatRegistry.viewHat(_idFrom);
-		(address strategyTo,,,) = hatRegistry.viewHat(_idTo);
-
-		IAllocationStrategy from = IAllocationStrategy(strategyFrom);
-		IAllocationStrategy to = IAllocationStrategy(strategyTo);
+		IAllocationStrategy from = IAllocationStrategy(hatRegistry.viewStrategy(_idFrom));
+		IAllocationStrategy to = IAllocationStrategy(hatRegistry.viewStrategy(_idTo));
 
 		require(from.underlyingAsset() == to.underlyingAsset());
 		IERC20(to.underlyingAsset()).approve(address(to), _amount);
